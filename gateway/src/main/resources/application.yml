@@ -1,0 +1,74 @@
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: default
+  cloud:
+    gateway:
+      routes:
+        - id: Taxi Booking
+          uri: http://localhost:8082
+          predicates:
+            - Path=/bookings/**, 
+        - id: Taxi Management
+          uri: http://localhost:8083
+          predicates:
+            - Path=/drivers/**, 
+        - id: Feedback
+          uri: http://localhost:8085
+          predicates:
+            - Path=/feedbacks/**, 
+        - id: frontend
+          uri: http://localhost:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: Taxi Booking
+          uri: http://taxiBooking:8080
+          predicates:
+            - Path=/bookings/**, 
+        - id: Taxi Management
+          uri: http://taxiManagement:8080
+          predicates:
+            - Path=/drivers/**, 
+        - id: Feedback
+          uri: http://feedback:8080
+          predicates:
+            - Path=/feedbacks/**, 
+        - id: frontend
+          uri: http://frontend:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080
